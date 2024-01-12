@@ -1,10 +1,7 @@
-SOURCES=../../runtimes/python/catala/src/catala/runtime.py \
+SOURCES = \
   src/allocations_familiales.py \
   src/aides_logement.py \
   main.py src/api.py
-
-dependencies:
-	pip install -r requirements.txt
 
 type:
 	mypy $(SOURCES)

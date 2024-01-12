@@ -16,7 +16,6 @@
    the License. *)
 
 open Js_of_ocaml
-open Law_source
 open Runtime_jsoo.Runtime
 module AF = Allocations_familiales
 module AF_web = Allocations_familiales_api_web

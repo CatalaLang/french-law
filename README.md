@@ -1,9 +1,9 @@
 # French Law Libraries
 
-This folder presents a working example of how Catala could be distributed and
-deployed inside existing applications. Each sub-folder is specialized for
-a particular programming language, and features a ready-to-use library of
-all the French public algorithms coded up using Catala so far.
+This repository presents a working example of how Catala could be distributed
+and deployed inside existing applications. Each sub-folder is specialized for a
+particular programming language, and features a ready-to-use library of all the
+French public algorithms coded up using Catala so far.
 
 Pre-built artifacts for the OCaml, JS and Python backends are available at
 https://catalalang.github.io/catala/ ; they are automatically updated to follow

@@ -16,7 +16,7 @@
    the License. *)
 
 open Runtime_ocaml.Runtime
-module Allocations_familiales = Law_source.Allocations_familiales
+module Allocations_familiales = Allocations_familiales
 module AF = Allocations_familiales
 
 let compute_allocations_familiales

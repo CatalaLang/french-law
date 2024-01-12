@@ -32,7 +32,7 @@ package, whose source doe can be found in `runtimes/python/catala` from the
 root of the Catala repository.
 
 All theses Python files feature type annotations which can be checked against
-using the following command inside this directory (`french_law/python`):
+using the following command inside this directory (`python`):
 
 ```
 make type
@@ -46,7 +46,7 @@ very important internally to wrap all of the input parameters using `src/catala.
 conversion functions.
 
 You can benchmark the computation using the following command inside this
-directory (`french_law/python`):
+directory (`python`):
 
 ```
 make bench
@@ -58,7 +58,7 @@ The generated Catala code also features a logging feature that let you inspect
 each step of the computation, as well as the values flowing through it. You can
 directly retrieve a list of log events just after using a Catala-generated
 function, and display this list as you wish. An example of such a display can
-be showcases by using the following command inside this directory (`french_law/python`):
+be showcases by using the following command inside this directory (`python`):
 
 ```
 make show_log

@@ -15,7 +15,7 @@
    the License. *)
 
 open Runtime_ocaml.Runtime
-module Allocations_familiales = Law_source.Allocations_familiales
+module Allocations_familiales = Allocations_familiales
 
 val compute_allocations_familiales :
   current_date:date ->

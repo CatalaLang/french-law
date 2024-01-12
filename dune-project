@@ -7,11 +7,11 @@
 (formatting)
 
 (source
- (uri git+https://github.com/CatalaLang/catala.git))
+ (uri git+https://github.com/CatalaLang/french-law.git))
 
-(homepage https://github.com/CatalaLang/catala)
+(homepage https://github.com/CatalaLang/french-law)
 
-(bug_reports https://github.com/CatalaLang/catala/issues)
+(bug_reports https://github.com/CatalaLang/french-law/issues)
 
 (authors
  "Denis Merigoux"
@@ -25,5 +25,3 @@
 (maintainers "contact@catala-lang.org")
 
 (license Apache-2.0)
-
-(using menhir 2.1)

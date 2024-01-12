@@ -116,7 +116,7 @@ let run_test_allocations_familiales () =
   | Runtime.AssertionFailed _ -> ()
 
 let aides_logement_input :
-    Law_source.Aides_logement.CalculetteAidesAuLogementGardeAlternee_in.t =
+    Aides_logement.CalculetteAidesAuLogementGardeAlternee_in.t =
   {
     menage_in =
       {
@@ -126,10 +126,10 @@ let aides_logement_input :
           {
             residence_principale = true;
             mode_occupation =
-              Law_source.Aides_logement.ModeOccupation.Locataire
+              Aides_logement.ModeOccupation.Locataire
                 {
                   bailleur =
-                    Law_source.Aides_logement.TypeBailleur.BailleurPrive ();
+                    Aides_logement.TypeBailleur.BailleurPrive ();
                   beneficiaire_aide_adulte_ou_enfant_handicapes = false;
                   logement_est_chambre = false;
                   colocation = false;
@@ -137,55 +137,55 @@ let aides_logement_input :
                     false;
                   logement_meuble_d842_2 = false;
                   changement_logement_d842_4 =
-                    Law_source.Aides_logement.ChangementLogementD842_4
+                    Aides_logement.ChangementLogementD842_4
                     .PasDeChangement
                       ();
                   loyer_principal = Runtime.money_of_units_int 450;
                 };
-            proprietaire = Law_source.Aides_logement.ParentOuAutre.Autre ();
+            proprietaire = Aides_logement.ParentOuAutre.Autre ();
             loue_ou_sous_loue_a_des_tiers =
-              Law_source.Aides_logement.LoueOuSousLoueADesTiers.Non ();
-            usufruit = Law_source.Aides_logement.ParentOuAutre.Autre ();
+              Aides_logement.LoueOuSousLoueADesTiers.Non ();
+            usufruit = Aides_logement.ParentOuAutre.Autre ();
             logement_decent_l89_462 = true;
             surface_m_carres = Runtime.integer_of_int 65;
-            zone = Law_source.Aides_logement.ZoneDHabitation.Zone2 ();
+            zone = Aides_logement.ZoneDHabitation.Zone2 ();
           };
         personnes_a_charge =
           Array.of_list
             [
-              Law_source.Aides_logement.PersonneACharge.EnfantACharge
+              Aides_logement.PersonneACharge.EnfantACharge
                 {
                   a_deja_ouvert_droit_aux_allocations_familiales = true;
                   nationalite =
-                    Law_source.Aides_logement.Nationalite.Francaise ();
+                    Aides_logement.Nationalite.Francaise ();
                   etudes_apprentissage_stage_formation_pro_impossibilite_travail =
                     false;
                   remuneration_mensuelle = Runtime.money_of_units_int 0;
                   obligation_scolaire =
-                    Law_source.Aides_logement.SituationObligationScolaire
+                    Aides_logement.SituationObligationScolaire
                     .Pendant
                       ();
                   situation_garde_alternee =
-                    Law_source.Aides_logement.SituationGardeAlternee
+                    Aides_logement.SituationGardeAlternee
                     .PasDeGardeAlternee
                       ();
                   date_de_naissance = Runtime.date_of_numbers 2015 1 1;
                   identifiant = Runtime.integer_of_int 0;
                 };
-              Law_source.Aides_logement.PersonneACharge.EnfantACharge
+              Aides_logement.PersonneACharge.EnfantACharge
                 {
                   a_deja_ouvert_droit_aux_allocations_familiales = true;
                   remuneration_mensuelle = Runtime.money_of_units_int 0;
                   obligation_scolaire =
-                    Law_source.Aides_logement.SituationObligationScolaire
+                    Aides_logement.SituationObligationScolaire
                     .Pendant
                       ();
                   situation_garde_alternee =
-                    Law_source.Aides_logement.SituationGardeAlternee
+                    Aides_logement.SituationGardeAlternee
                     .PasDeGardeAlternee
                       ();
                   nationalite =
-                    Law_source.Aides_logement.Nationalite.Francaise ();
+                    Aides_logement.Nationalite.Francaise ();
                   etudes_apprentissage_stage_formation_pro_impossibilite_travail =
                     false;
                   date_de_naissance = Runtime.date_of_numbers 2016 1 1;
@@ -194,14 +194,14 @@ let aides_logement_input :
             ];
         nombre_autres_occupants_logement = Runtime.integer_of_int 0;
         situation_familiale =
-          Law_source.Aides_logement.SituationFamiliale.Concubins ();
+          Aides_logement.SituationFamiliale.Concubins ();
         condition_rattache_foyer_fiscal_parent_ifi = false;
         enfant_a_naitre_apres_quatrieme_mois_grossesse = false;
         residence = Metropole ();
       };
     demandeur_in =
       {
-        nationalite = Law_source.Aides_logement.Nationalite.Francaise ();
+        nationalite = Aides_logement.Nationalite.Francaise ();
         personne_hebergee_centre_soin_l_L162_22_3_securite_sociale = false;
         date_naissance = Runtime.date_of_numbers 1992 1 1;
         est_non_salarie_agricole_l781_8_l_781_46_code_rural = false;
@@ -215,7 +215,7 @@ let aides_logement_input :
 let run_test_aides_logement () =
   try
     ignore
-      (Law_source.Aides_logement.calculette_aides_au_logement_garde_alternee
+      (Aides_logement.calculette_aides_au_logement_garde_alternee
          aides_logement_input)
   with
   | (Runtime.NoValueProvided _ | Runtime.ConflictError _) as err ->
