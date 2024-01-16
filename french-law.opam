@@ -7,7 +7,7 @@ maintainer: ["contact@catala-lang.org"]
 authors: ["Denis Merigoux"]
 license: "Apache-2.0"
 homepage: "https://github.com/CatalaLang/french-law"
-bug-reports: "https://github.com/CatalaLang/french-law/issues"
+bug-reports: "https://github.com/CatalaLang/catala/issues"
 depends: [
   "dune" {>= "2.8"}
   "ocaml" {>= "4.11.0"}

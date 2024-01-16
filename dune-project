@@ -11,7 +11,7 @@
 
 (homepage https://github.com/CatalaLang/french-law)
 
-(bug_reports https://github.com/CatalaLang/french-law/issues)
+(bug_reports https://github.com/CatalaLang/catala/issues)
 
 (authors
  "Denis Merigoux"
