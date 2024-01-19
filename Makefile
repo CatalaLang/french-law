@@ -36,8 +36,11 @@ generate_french_law_json_schemas:
 # JS
 #-----------------------------------------
 
-dependencies-js:
+dependencies-js-full:
 	$(MAKE) -C $(FRENCH_LAW_JS_LIB_DIR) dependencies
+
+dependencies-js:
+	npm install benchmark
 
 run_french_law_library_benchmark_js: build_french_law_library_js
 	$(MAKE) -C $(FRENCH_LAW_JS_LIB_DIR) bench
@@ -98,6 +101,8 @@ run_french_law_library_benchmark_python: $(PY_ENV_DIR) type_french_law_library_p
 ##########################################
 # High-level test and benchmarks commands
 ##########################################
+
+dependencies: dependencies-js dependencies-python
 
 #> tests_ocaml			  : Run OCaml unit tests for the Catala-generated code
 tests_ocaml: run_french_law_library_ocaml_tests
