@@ -92,10 +92,10 @@ generate_french_law_library_python:
 	dune build $(FRENCH_LAW_LIBRARY_PYTHON)
 
 #> type_french_law_library_python	       : Types the French law library Python sources with mypy
-type_french_law_library_python: $(PY_VENV_DIR) generate_french_law_library_python
+type_french_law_library_python: generate_french_law_library_python
 	$(PY_VENV_ACTIVATE) $(MAKE) -C $(FRENCH_LAW_PYTHON_LIB_DIR) type
 
-run_french_law_library_benchmark_python: $(PY_ENV_DIR) type_french_law_library_python
+run_french_law_library_benchmark_python: type_french_law_library_python
 	$(PY_VENV_ACTIVATE) $(MAKE) -C $(FRENCH_LAW_PYTHON_LIB_DIR) bench
 
 ##########################################
