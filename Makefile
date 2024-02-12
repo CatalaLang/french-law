@@ -3,6 +3,8 @@ help : Makefile
 
 OPAM = opam --cli=2.1
 
+CATALA_LIBDIR ?= $(shell $(OPAM) var catala:lib)
+
 #-----------------------------------------
 # OCaml
 #-----------------------------------------
@@ -59,7 +61,7 @@ build_french_law_library_web_api: build_french_law_library_js generate_french_la
 
 # Venv setup
 
-PY_VENV_DIR = _python_venv
+PY_VENV_DIR ?= _python_venv
 
 PY_VENV_ACTIVATE = . $(PY_VENV_DIR)/bin/activate;
 
@@ -71,7 +73,7 @@ $(PY_VENV_DIR)/stamp:
 	test -d $(PY_VENV_DIR) || python3 -m venv $(PY_VENV_DIR)
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U pip
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U \
-	  -e $$($(OPAM) var catala:lib)/runtime_python
+	  -e $(CATALA_LIBDIR)/runtime_python
 	touch $@
 
 dependencies-python: $(PY_VENV_DIR)
