@@ -4,6 +4,7 @@ help : Makefile
 OPAM = opam --cli=2.1
 
 CATALA_LIBDIR ?= $(shell $(OPAM) var catala:lib)
+CATALA_EXAMPLES_LIBDIR ?= $(shell $(OPAM) var catala-examples:lib)
 
 #-----------------------------------------
 # OCaml
@@ -13,9 +14,6 @@ FRENCH_LAW_OCAML_LIB_DIR = ocaml
 
 run_french_law_library_benchmark_ocaml:
 	dune exec $(FRENCH_LAW_OCAML_LIB_DIR)/bench.exe
-
-run_french_law_library_ocaml_tests:
-	dune exec $(FRENCH_LAW_OCAML_LIB_DIR)/run_unit_tests.exe
 
 #-----------------------------------------
 # JSON schemas
@@ -73,7 +71,8 @@ $(PY_VENV_DIR)/stamp:
 	test -d $(PY_VENV_DIR) || python3 -m venv $(PY_VENV_DIR)
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U pip
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U \
-	  -e $(CATALA_LIBDIR)/runtime_python
+	  $(CATALA_LIBDIR)/runtime_python \
+	  $(CATALA_EXAMPLES_LIBDIR)/aides_logement/Aides_logement_python.tar
 	touch $@
 
 dependencies-python: $(PY_VENV_DIR)
@@ -82,19 +81,8 @@ dependencies-python: $(PY_VENV_DIR)
 
 FRENCH_LAW_PYTHON_LIB_DIR=python
 
-FRENCH_LAW_LIBRARY_PYTHON = \
-  $(FRENCH_LAW_PYTHON_LIB_DIR)/src/allocations_familiales.py \
-  $(FRENCH_LAW_PYTHON_LIB_DIR)/src/aides_logement.py
-
-$(FRENCH_LAW_LIBRARY_PYTHON):
-	dune build $@
-
-#> generate_french_law_library_python   : Generates the French law library Python sources from Catala
-generate_french_law_library_python:
-	dune build $(FRENCH_LAW_LIBRARY_PYTHON)
-
 #> type_french_law_library_python	       : Types the French law library Python sources with mypy
-type_french_law_library_python: generate_french_law_library_python
+type_french_law_library_python:
 	$(PY_VENV_ACTIVATE) $(MAKE) -C $(FRENCH_LAW_PYTHON_LIB_DIR) type
 
 run_french_law_library_benchmark_python: type_french_law_library_python
@@ -105,9 +93,6 @@ run_french_law_library_benchmark_python: type_french_law_library_python
 ##########################################
 
 dependencies: dependencies-js dependencies-python
-
-#> tests_ocaml			  : Run OCaml unit tests for the Catala-generated code
-tests_ocaml: run_french_law_library_ocaml_tests
 
 #> bench_ocaml			  : Run OCaml benchmarks for the Catala-generated code
 bench_ocaml: run_french_law_library_benchmark_ocaml
@@ -121,10 +106,8 @@ bench_python: run_french_law_library_benchmark_python
 website-assets-base: build_french_law_library_web_api
 
 all: \
-  tests_ocaml bench_ocaml \
+  bench_ocaml \
   build_french_law_library_js \
   bench_js \
-  generate_french_law_library_python \
-  type_french_law_library_python \
   bench_python \
   website-assets-base

@@ -1,9 +1,16 @@
 #!python3
 
 from datetime import date
-from src.aides_logement import ModeOccupation_Code, Nationalite_Code, PrestationRecue_Code, SituationFamiliale_Code, SituationGardeAlternee_Code, SituationObligationScolaire_Code, TypeBailleur_Code, ZoneDHabitation_Code, Nationalite
-from src.aides_logement import Collectivite_Code as Collectivite_Code_APL
-from src.allocations_familiales import PriseEnCharge_Code, Collectivite_Code, SituationObligationScolaire
+# Note: le paquet Aides_logement inclut à la fois les AL et les allocations
+# familiales en tant que sous-modules, donc nous n'incluons pas le paquet
+# séparé Allocations_familiales, qui ferait doublon.
+from Aides_logement import *
+from Aides_logement.Aides_logement import *
+from Aides_logement.France import *
+from Aides_logement.Prestations_familiales import *
+from Aides_logement.Allocations_familiales import InterfaceAllocationsFamilialesIn, PriseEnCharge, interface_allocations_familiales, PriseEnCharge_Code, EnfantEntree, InterfaceAllocationsFamilialesIn
+# Attention: certains types d'Allocations_familiales ont les mêmes noms que ceux
+# de Prestations_familiales, ce qui causerait des conflits avec "import *".
 from src.api import EnfantAPL, InfosLocation, aides_logement, allocations_familiales, Enfant
 from catala.runtime import LogEvent, LogEventCode, reset_log, retrieve_log, Unit
 import timeit
@@ -37,7 +44,7 @@ def call_allocations_familiales() -> float:
 
 def call_aides_logement() -> float:
     return aides_logement(
-        residence=Collectivite_Code_APL.Metropole,
+        residence=Collectivite_Code.Metropole,
         date_courante=date(2022, 5, 1),
         ressources_menage_prises_en_compte=11_500,
         date_naissance_demandeur=date(1992, 1, 1),

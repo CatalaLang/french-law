@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CatalaLang/catala.git"
+    "url": "git+https://github.com/CatalaLang/french-law.git"
   },
   "keywords": [
     "ReScript",
@@ -32,7 +32,7 @@
   "bugs": {
     "url": "https://github.com/CatalaLang/catala/issues"
   },
-  "homepage": "https://github.com/CatalaLang/catala/blob/master/french_law/js/README.md",
+  "homepage": "https://github.com/CatalaLang/french-law/blob/master/french_law/js/README.md",
   "publishConfig": {
     "access": "public"
   }

@@ -21,7 +21,7 @@ val compute_allocations_familiales :
   current_date:date ->
   children:Allocations_familiales.EnfantEntree.t array ->
   income:int ->
-  residence:Allocations_familiales.Collectivite.t ->
+  residence:France.Collectivite.t ->
   is_parent:bool ->
   fills_title_I:bool ->
   had_rights_open_before_2012:bool ->

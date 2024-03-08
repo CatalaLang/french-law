@@ -1,5 +1,5 @@
 opam-version: "2.0"
-version: "0.8.0"
+version: "0.9.0"
 synopsis: "A collection of algorithms and computations defined by French law"
 description:
   "This library contains the implementations of algorithmic portions of French law. The library source code was generated from Catala annotations of the relevant portions of the French law, see https://catala-lang.org"
@@ -11,11 +11,12 @@ bug-reports: "https://github.com/CatalaLang/catala/issues"
 depends: [
   "dune" {>= "2.8"}
   "ocaml" {>= "4.11.0"}
-  "catala" {= version}
+  "catala" {>= "0.9.0" & < "0.10"}
+  "catala-examples" {= version}
   "odoc" {with-doc}
+  "benchmark" {>= "1.6"}
 ]
 build: [
-  ["dune" "subst"] {dev}
   [
     "dune"
     "build"

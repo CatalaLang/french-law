@@ -23,7 +23,7 @@ let compute_allocations_familiales
     ~(current_date : date)
     ~(children : AF.EnfantEntree.t array)
     ~(income : int)
-    ~(residence : AF.Collectivite.t)
+    ~(residence : France.Collectivite.t)
     ~(is_parent : bool)
     ~(fills_title_I : bool)
     ~(had_rights_open_before_2012 : bool) : float =
