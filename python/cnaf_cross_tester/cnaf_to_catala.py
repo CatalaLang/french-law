@@ -1,7 +1,9 @@
 import datetime
 from typing import List
 from catala.runtime import Unit  # type: ignore
-from ..src.aides_logement import Collectivite, Collectivite_Code, Nationalite, CategorieEquivalenceLoyerAllocationLogementFoyer_Code, LogementFoyer, ModeOccupation_Code, Nationalite_Code, SituationFamiliale_Code, SituationGardeAlternee_Code, SituationObligationScolaire_Code, TypeBailleur_Code, TypeLogementFoyer_Code, ZoneDHabitation_Code
+from Aides_logement.France import *
+from Aides_logement.Prestations_familiales import *
+from Aides_logement.Aides_logement import *
 from ..src.api import EnfantAPL, InfosLocation, InfosLogementFoyer, InfosSpecifiques, PersonneAChargeAPL, aides_logement
 from .input import Logement_Code, AppartementOuMaison, AppartementOuMaisonType, CnafSimulatorInput, LogementCrous, LogementCrousType, LogementMaisonRetraite, LogementResidenceSocialeFJT, SeulOuCouple, Zone
 

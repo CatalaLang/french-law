@@ -55,6 +55,7 @@ $(PY_VENV_DIR)/stamp:
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U \
 	  $(CATALA_LIBDIR)/runtime_python \
 	  $(CATALA_EXAMPLES_LIBDIR)/french-law_python.tar.gz
+	$(PY_VENV_ACTIVATE) python3 -m pip install -U requests # Needed by cnaf_cross_tester
 	touch $@
 
 dependencies-python: $(PY_VENV_DIR)
@@ -64,11 +65,14 @@ dependencies-python: $(PY_VENV_DIR)
 FRENCH_LAW_PYTHON_LIB_DIR=python
 
 #> type_french_law_library_python	       : Types the French law library Python sources with mypy
-type_french_law_library_python:
+type_french_law_library_python: dependencies-python
 	$(PY_VENV_ACTIVATE) $(MAKE) -C $(FRENCH_LAW_PYTHON_LIB_DIR) type
 
 run_french_law_library_benchmark_python: type_french_law_library_python
 	$(PY_VENV_ACTIVATE) $(MAKE) -C $(FRENCH_LAW_PYTHON_LIB_DIR) bench
+
+run_cnaf_cross_tester: dependencies-python
+	$(PY_VENV_ACTIVATE) python -m $(FRENCH_LAW_PYTHON_LIB_DIR).cnaf_cross_tester.main
 
 #########################################
 # High-level test and benchmarks commands
