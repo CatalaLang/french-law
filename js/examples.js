@@ -1,4 +1,4 @@
-var Law = require("./src/french_law.js");
+var Law = require("french-law");
 var Benchmark = require("benchmark");
 const util = require("util");
 const { cachedDataVersionTag } = require("v8");
@@ -6,7 +6,8 @@ const { truncateSync } = require("fs");
 var suite = new Benchmark.Suite();
 
 function run_computation_AF(log) {
-  var result = Law.computeAllocationsFamiliales({
+  var result =
+  Law.AllocationsFamilialesLib.interfaceAllocationsFamiliales({
     iDateCouranteIn: "2020-04-20",
     iEnfantsIn: [
       {
@@ -34,10 +35,10 @@ function run_computation_AF(log) {
     iPersonneChargeEffectivePermanenteEstParentIn: true,
     iPersonneChargeEffectivePermanenteRemplitTitreIIn: true,
     iAvaitEnfantAChargeAvant1erJanvier2012In: false,
-  });
+  }).iMontantVerse;
   if (log) {
     console.log(
-      util.inspect(Law.eventsManager.retrieveEvents(0).slice(1, 10), {
+      util.inspect(Law.eventsManager.retrieveEvents().slice(1, 10), {
         showHidden: false,
         depth: null,
         colors: true,
@@ -49,7 +50,8 @@ function run_computation_AF(log) {
 }
 
 function run_computation_AL(log) {
-  var result = Law.computeAidesAuLogement({
+  var result =
+  Law.AidesLogementLib.calculetteAidesAuLogementGardeAlternee({
     menageIn: {
       prestationsRecues: [],
       logement: {
@@ -165,10 +167,10 @@ function run_computation_AL(log) {
     },
     dateCouranteIn: "2022-05-01",
     ressourcesMenagePrisesEnCompteIn: 11500,
-  });
+  }).aideFinale;
   if (log) {
     console.log(
-      util.inspect(Law.eventsManager.retrieveEvents(0).slice(1, 10), {
+      util.inspect(Law.eventsManager.retrieveEvents().slice(1, 10), {
         showHidden: false,
         depth: null,
         colors: true,
