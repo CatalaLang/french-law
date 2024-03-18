@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from catala.runtime import *  # type: ignore
-from Aides_logement.France import *
-from Aides_logement.Prestations_familiales import *
-from Aides_logement.Allocations_familiales import InterfaceAllocationsFamilialesIn, PriseEnCharge, interface_allocations_familiales, PriseEnCharge_Code, EnfantEntree, InterfaceAllocationsFamilialesIn
-from Aides_logement.Aides_logement import *
+from french_law.France import *
+from french_law.Prestations_familiales import *
+from french_law.Allocations_familiales import InterfaceAllocationsFamilialesIn, PriseEnCharge, interface_allocations_familiales, PriseEnCharge_Code, EnfantEntree, InterfaceAllocationsFamilialesIn
+from french_law.Aides_logement import *
 from typing import cast
 
 # Allocations familiales

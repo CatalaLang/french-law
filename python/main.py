@@ -1,14 +1,11 @@
 #!python3
 
 from datetime import date
-# Note: le paquet Aides_logement inclut à la fois les AL et les allocations
-# familiales en tant que sous-modules, donc nous n'incluons pas le paquet
-# séparé Allocations_familiales, qui ferait doublon.
-from Aides_logement import *
-from Aides_logement.Aides_logement import *
-from Aides_logement.France import *
-from Aides_logement.Prestations_familiales import *
-from Aides_logement.Allocations_familiales import InterfaceAllocationsFamilialesIn, PriseEnCharge, interface_allocations_familiales, PriseEnCharge_Code, EnfantEntree, InterfaceAllocationsFamilialesIn
+from french_law import *
+from french_law.Aides_logement import *
+from french_law.France import *
+from french_law.Prestations_familiales import *
+from french_law.Allocations_familiales import InterfaceAllocationsFamilialesIn, PriseEnCharge, interface_allocations_familiales, PriseEnCharge_Code, EnfantEntree, InterfaceAllocationsFamilialesIn
 # Attention: certains types d'Allocations_familiales ont les mêmes noms que ceux
 # de Prestations_familiales, ce qui causerait des conflits avec "import *".
 from src.api import EnfantAPL, InfosLocation, aides_logement, allocations_familiales, Enfant

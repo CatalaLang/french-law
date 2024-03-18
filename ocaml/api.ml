@@ -17,6 +17,8 @@
 
 open Runtime_ocaml.Runtime
 module Allocations_familiales = Allocations_familiales
+module Aides_logement = Aides_logement
+
 module AF = Allocations_familiales
 
 let compute_allocations_familiales

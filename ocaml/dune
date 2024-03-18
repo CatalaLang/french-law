@@ -12,7 +12,6 @@
  (synopsis
   "A collection of functions for computing French taxes and benefits derived from Catala programs")
  (libraries catala.runtime_ocaml
-            catala-examples.allocations_familiales
             catala-examples.aides_logement)
  (modules api))
 

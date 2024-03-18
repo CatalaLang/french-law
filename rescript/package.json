@@ -4,7 +4,6 @@
   "description": "Library of computations defined by French legislative texts, extract from Catala programs (https://catala-lang.org)",
   "main": "index.js",
   "devDependencies": {
-    "@catala-lang/rescript-catala": "file:../../catala/runtimes/rescript",
     "benchmark": "^2.1.4",
     "rescript": "^10.1.4"
   },
@@ -35,6 +34,5 @@
     "access": "public"
   },
   "dependencies": {
-    "french-law": "file:../../catala-examples/_build/french-law_npm.tar.gz"
   }
 }

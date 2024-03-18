@@ -16,6 +16,7 @@
 
 open Runtime_ocaml.Runtime
 module Allocations_familiales = Allocations_familiales
+module Aides_logement = Aides_logement
 
 val compute_allocations_familiales :
   current_date:date ->

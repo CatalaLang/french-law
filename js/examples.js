@@ -1,4 +1,4 @@
-var Law = require("french-law");
+var Law = require("@catala-lang/french-law");
 var Benchmark = require("benchmark");
 const util = require("util");
 const { cachedDataVersionTag } = require("v8");
@@ -46,7 +46,7 @@ function run_computation_AF(log) {
     );
   }
   Law.eventsManager.resetLog();
-  console.log("Family benefits mounthly amount:", result, "€");
+  console.log("Family benefits monthly amount:", result, "€");
 }
 
 function run_computation_AL(log) {
@@ -178,7 +178,7 @@ function run_computation_AL(log) {
     );
   }
   Law.eventsManager.resetLog();
-  console.log("Housing benefits mounthly amount:", result, "€");
+  console.log("Housing benefits monthly amount:", result, "€");
 }
 
 try {

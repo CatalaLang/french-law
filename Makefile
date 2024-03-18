@@ -1,10 +1,8 @@
 help : Makefile
 	@sed -n 's/^#> //p' $<
 
-OPAM = opam --cli=2.1
-
-CATALA_LIBDIR ?= $(shell $(OPAM) var catala:lib)
-CATALA_EXAMPLES_LIBDIR ?= $(shell $(OPAM) var catala-examples:lib)
+CATALA_LIBDIR ?= $(shell ocamlfind query catala)
+CATALA_EXAMPLES_LIBDIR ?= $(shell ocamlfind query catala-examples)
 
 #-----------------------------------------
 # OCaml
@@ -24,7 +22,7 @@ FRENCH_LAW_JS_LIB_DIR = js
 dependencies-js:
 	npm install benchmark $(CATALA_EXAMPLES_LIBDIR)/french-law_npm.tar.gz
 
-run_french_law_library_benchmark_js: build_french_law_library_js
+run_french_law_library_benchmark_js:
 	node js/examples.js
 
 #-----------------------------------------
@@ -33,7 +31,10 @@ run_french_law_library_benchmark_js: build_french_law_library_js
 
 #> build_french_law_library_web_api     : Builds the rescript web API of the French law library
 build_french_law_library_web_api:
-	cd rescript && yarn && yarn build
+	cd rescript && \
+	yarn add $(CATALA_LIBDIR)/runtime_rescript \
+	         $(CATALA_EXAMPLES_LIBDIR)/french-law_npm.tar.gz && \
+	yarn && yarn build
 
 #-----------------------------------------
 # Python
@@ -46,15 +47,15 @@ PY_VENV_DIR ?= _python_venv
 PY_VENV_ACTIVATE = . $(PY_VENV_DIR)/bin/activate;
 
 # Rebuild when requirements change
-$(PY_VENV_DIR): $(PY_VENV_DIR)/stamp
+$(PY_VENV_DIR): $(PY_VENV_DIR)/french-law.stamp
 
 # Setup a venv and intall the Catala runtime from opam
-$(PY_VENV_DIR)/stamp:
+$(PY_VENV_DIR)/french-law.stamp:
 	test -d $(PY_VENV_DIR) || python3 -m venv $(PY_VENV_DIR)
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U pip
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U \
 	  $(CATALA_LIBDIR)/runtime_python \
-	  $(CATALA_EXAMPLES_LIBDIR)/french-law_python.tar.gz
+	  $(CATALA_EXAMPLES_LIBDIR)/french_law_python.tar.gz
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U requests # Needed by cnaf_cross_tester
 	touch $@
 
@@ -93,7 +94,6 @@ website-assets-base: build_french_law_library_web_api
 
 all: \
   bench_ocaml \
-  build_french_law_library_js \
   bench_js \
   bench_python \
   website-assets-base
