@@ -10,7 +10,10 @@ CATALA_EXAMPLES_LIBDIR ?= $(shell ocamlfind query catala-examples)
 
 FRENCH_LAW_OCAML_LIB_DIR = ocaml
 
-run_french_law_library_benchmark_ocaml:
+french_law_library_ocaml:
+	dune build @install
+
+run_french_law_library_benchmark_ocaml: french_law_library_ocaml
 	dune exec $(FRENCH_LAW_OCAML_LIB_DIR)/bench.exe
 
 #-----------------------------------------
