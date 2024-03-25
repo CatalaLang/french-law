@@ -1,7 +1,4 @@
-SOURCES = \
-  src/allocations_familiales.py \
-  src/aides_logement.py \
-  main.py src/api.py
+SOURCES = main.py src/api.py
 
 type:
 	mypy $(SOURCES)

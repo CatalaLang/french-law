@@ -18,6 +18,11 @@ will export functions corresponding to the scopes of the original Catala
 program. You can then reuse those exported functions in your application written
 in X.
 
+The code for the examples here is provided in the
+[catala-examples](https://github.com/catalaLang/catala-examples) repository; see
+its Makefile for how the base packages are created (for ocamlfind/dune, npm,
+pip). The code here shows examples of how to use those:
+
 ## OCaml
 
 To see how to deploy Catala programs as an OCaml library, see

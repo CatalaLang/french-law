@@ -1,79 +1,67 @@
-# [`@catala-lang/french-law`](https://www.npmjs.com/package/@catala-lang/french-law?activeTab=readme) ![npm][npm]
+# French law js library, compiled from catala
 
 This folder contains a ready-to-use Javascript library featuring French public
-algorithms coded up in Catala and the corresponding ReScript wrapper.
+algorithms coded up in Catala.
 
 ## Generating the source files
 
-The JS code is extracted from OCaml using
-[`js_of_ocaml`](https://ocsigen.org/js_of_ocaml/). See the
-[dedicated README](../ocaml/README.md) of the OCaml library for more precisions
-about the OCaml code.
+The JS code (extracted from OCaml using
+[`js_of_ocaml`](https://ocsigen.org/js_of_ocaml/)) is provided and installed by
+the [catala-examples](https://github.com/CatalaLang/catala-examples) repository.
+It can be installed with `make dependencies-js` in the parent directory.
 
-The wrapping between OCaml and JS is done by the generated
-`../ocaml/law_source/<filename>_api_web.ml` modules.
+See the [dedicated README](../ocaml/README.md) of the OCaml library for more
+precisions about the OCaml code.
 
-You can generate the `french_law.js` source JS module by invoking this command
-from the root of the repository:
-
-```
-make build_french_law_library_js
-```
 
 ## API description
 
-The `./src/french_law.js` library exposes:
+The `french-law` npm package exposes:
 
 - an [event manager](#the-event-manager)
-- a list of [API functions](#api-functions)
-- a list of fully exposed [sub-libraries](#sub-libraries)
+- a list of [sub-libraries](#sub-libraries)
 
-### ReScript
-
-The ReScript API is essentialy the same that the JS one within the
-`CatalaFrenchLaw` top module.
-
-Example of project using the ReScript wrapper:
-
-* [`catala-website`](https://github.com/CatalaLang/catala-website)
+See the `examples.js` file for a first overview.
 
 ### The event manager
 
 A JavaScript object `eventsManager` is exposed with three callable methods:
 
 ```javascript
-var frenchLaw = require("french_law.js");
+var frenchLaw = require("french-law");
 
 // Clears the raw log event array.
-frenchLaw.eventsManager.resetLog(0);
+frenchLaw.eventsManager.resetLog();
 
 // Returns the current content of the raw log event array.
-let rawEvents = frenchLaw.eventsManager.retrieveRawEvents(0)
+let rawEvents = frenchLaw.eventsManager.retrieveRawEvents();
 
 // Returns the event array parsed from the current content of the raw log event array.
-let events = frenchLaw.eventsManager.retrieveEvents(0)
+let events = frenchLaw.eventsManager.retrieveEvents();
 ```
 
-> **Important**: you need to give an arbitrary value as argument.
+### Sub libraries
 
-### Date and time
+The `french-law` npm package exposes the following sub libs:
 
-Date values are encoded to JS string according the [ISO8601
-format](https://www.iso.org/iso-8601-date-and-time-format.html): 'YYYY-MM-DD'.
+```javascript
+var frenchLaw = require("french-law");
 
-### API functions
+// Allocations familiales
+var allocationsFamiliales = frenchLaw.AllocationsFamilialesLib
 
-The `french_law.js` library exposes for each Catala program available in
-`../ocaml/law_source/` a function to call in order to run the corresponding
-encoded algorithm.
+// APL
+var aidesLogement = frenchLaw.AidesLogementLib
+```
 
 #### Available algorithms
 
 ##### Allocations familiales
 
-The function is `computeAllocationsFamiliales`. This computation
-returns the amount of _allocations familiales_ for one household described
-by the input. More precisely, the result returned is the sum of:
+The function is `AllocationsFamilialesLib.interfaceAllocationsFamiliales`. This
+computation returns an object where the `iMontantVerse` field is the amount of
+_allocations familiales_ for one household described by the input. More
+precisely, the result returned is the sum of:
 
 - _la base des allocations familiales_
 - _l'allocation forfaitaire relai pour dépassement de l'âge limite_
@@ -123,29 +111,17 @@ Notably, the `dPriseEnCharge` variable for each child expects a value among:
 - "ServicesSociauxAllocationVerseeALaFamille"
 - "ServicesSociauxAllocationVerseeAuxServicesSociaux"
 
-> See `../ocaml/law_source/allocations_familiales_api_web.ml` for more
+> See `allocations_familiales_api_web.ml` from `catala-examples` for more
 > information about data types.
 
 ##### Aides logement
 
+The function is `AidesLogementLib.calculetteAidesAuLogementGardeAlternee`, and
+the amount is in the `aideFinale` field of the returned object.
+
 > TODO: add information about `aides_logement_api_web.ml`.
 
-### Sub libraries
+### Date and time
 
-All declared types and scopes of a Catala program are available in JavaScript
-via the following sub libs:
-
-```javascript
-var frenchLaw = require("french_law.js");
-
-// Allocations familiales
-// corresponding to the file: `../ocaml/law_source/allocations_familiales_api_web.ml
-var allocationsFamiliales = frenchLaw.AllocationsFamilialesLib
-
-// APL
-// corresponding to the file: `../ocaml/law_source/aides_logement_api_web.ml
-var aidesLogement = frenchLaw.AidesLogementLib
-```
-
-
-[npm]: https://img.shields.io/npm/v/@catala-lang/french-law
+Date values are encoded to JS string according the [ISO8601
+format](https://www.iso.org/iso-8601-date-and-time-format.html): 'YYYY-MM-DD'.

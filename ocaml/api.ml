@@ -17,13 +17,15 @@
 
 open Runtime_ocaml.Runtime
 module Allocations_familiales = Allocations_familiales
+module Aides_logement = Aides_logement
+
 module AF = Allocations_familiales
 
 let compute_allocations_familiales
     ~(current_date : date)
     ~(children : AF.EnfantEntree.t array)
     ~(income : int)
-    ~(residence : AF.Collectivite.t)
+    ~(residence : France.Collectivite.t)
     ~(is_parent : bool)
     ~(fills_title_I : bool)
     ~(had_rights_open_before_2012 : bool) : float =

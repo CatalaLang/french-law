@@ -40,9 +40,9 @@ let random_children (id : int) =
       d_beneficie_titre_personnel_aide_personnelle_logement = Random.bool ();
     }
 
-let format_residence (fmt : Format.formatter) (r : AF.Collectivite.t) : unit =
+let format_residence (fmt : Format.formatter) (r : AF.France.Collectivite.t) : unit =
   Format.fprintf fmt "%s"
-    AF.Collectivite.(
+    AF.France.Collectivite.(
       match r with
       | Metropole _ -> "Métropole"
       | Guyane _ -> "Guyane"
@@ -79,9 +79,9 @@ let run_test_allocations_familiales () =
   let residence =
     let x = Random.int 2 in
     match x with
-    | 0 -> AF.Collectivite.Metropole ()
-    | 1 -> AF.Collectivite.Guadeloupe ()
-    | _ -> AF.Collectivite.Mayotte ()
+    | 0 -> AF.France.Collectivite.Metropole ()
+    | 1 -> AF.France.Collectivite.Guadeloupe ()
+    | _ -> AF.France.Collectivite.Mayotte ()
   in
   try
     let amount =
@@ -162,7 +162,7 @@ let aides_logement_input :
                     false;
                   remuneration_mensuelle = Runtime.money_of_units_int 0;
                   obligation_scolaire =
-                    Aides_logement.SituationObligationScolaire
+                    Prestations_familiales.SituationObligationScolaire
                     .Pendant
                       ();
                   situation_garde_alternee =
@@ -177,7 +177,7 @@ let aides_logement_input :
                   a_deja_ouvert_droit_aux_allocations_familiales = true;
                   remuneration_mensuelle = Runtime.money_of_units_int 0;
                   obligation_scolaire =
-                    Aides_logement.SituationObligationScolaire
+                    Prestations_familiales.SituationObligationScolaire
                     .Pendant
                       ();
                   situation_garde_alternee =

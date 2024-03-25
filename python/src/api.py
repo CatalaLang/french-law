@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from catala.runtime import *  # type: ignore
-from .allocations_familiales import Collectivite, Collectivite_Code, InterfaceAllocationsFamilialesIn, PriseEnCharge, interface_allocations_familiales, PriseEnCharge_Code, EnfantEntree, InterfaceAllocationsFamilialesIn
-from .aides_logement import AutrePersonneACharge, CategorieEquivalenceLoyerAllocationLogementFoyer, CategorieEquivalenceLoyerAllocationLogementFoyer_Code, ChangementLogementD8424, ChangementLogementD8424_Code, ConventionANHA, ConventionBailleurSocial, EnfantACharge, InfosChangementLogementD8424, Location, Logement, LogementFoyer, LoueOuSousLoueADesTiers, LoueOuSousLoueADesTiers_Code, Menage, ModeOccupation, ModeOccupation_Code, Nationalite, Nationalite_Code, NeufOuAncien, NeufOuAncien_Code, ParentOuAutre, ParentOuAutre_Code, Parente, Parente_Code, PersonneACharge, PersonneSousLocation, PrestationRecue, PrestationRecue_Code, Pret, Proprietaire, SituationFamiliale, SituationFamiliale_Code, SituationGardeAlternee_Code, SituationObligationScolaire_Code, TitulairePret, TitulairePret_Code, TypeBailleur, TypeBailleur_Code, TypeLogementFoyer, TypeLogementFoyer_Code, TypePret, TypePret_Code, TypeTravauxLogementD83215, TypeTravauxLogementD83215_Code, TypeTravauxLogementR8425, TypeTravauxLogementR8425_Code, ZoneDHabitation, ZoneDHabitation_Code, calculette_aides_au_logement_garde_alternee, CalculetteAidesAuLogementGardeAlterneeIn, Demandeur, PersonneACharge_Code, SituationObligationScolaire, SituationGardeAlternee, AccordFinancementRepresentantEtatOutreMer_Code, AccordFinancementRepresentantEtatOutreMer
-from .aides_logement import Collectivite_Code as Collectivite_Code_APL
-from .aides_logement import Collectivite as Collectivite_APL
+from french_law.France import *
+from french_law.Prestations_familiales import *
+from french_law.Allocations_familiales import InterfaceAllocationsFamilialesIn, PriseEnCharge, interface_allocations_familiales, PriseEnCharge_Code, EnfantEntree, InterfaceAllocationsFamilialesIn
+from french_law.Aides_logement import *
 from typing import cast
 
 # Allocations familiales
@@ -237,7 +237,7 @@ class InfosAccessionPropriete(InfosSpecifiques):
 
 def aides_logement(
     date_courante: datetime.date,
-    residence: Collectivite_Code_APL,
+    residence: Collectivite_Code,
     ressources_menage_prises_en_compte: int,
     date_naissance_demandeur: datetime.date,
     nationalite_demandeur: Nationalite,
@@ -394,7 +394,7 @@ def aides_logement(
 
     out = calculette_aides_au_logement_garde_alternee(CalculetteAidesAuLogementGardeAlterneeIn(
         menage_in=Menage(
-            residence=Collectivite_APL(
+            residence=Collectivite(
                 code=residence, value=Unit()),
             prestations_recues=[PrestationRecue(
                 code=presta, value=Unit()) for presta in prestations_recues],

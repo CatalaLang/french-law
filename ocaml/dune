@@ -6,35 +6,12 @@
  (package french-law)
  (libraries api benchmark))
 
-(executable
- (name run_unit_tests)
- (modes native)
- (modules run_unit_tests)
- (libraries
-  catala-examples.allocations_familiales
-  catala-examples.aides_logement))
-
-(executable
- (name api_web)
- (modes byte js)
- (modules api_web)
- (preprocess
-  (pps js_of_ocaml-ppx))
- (libraries
-  catala.runtime_ocaml
-  catala.runtime_jsoo
-  js_of_ocaml
-  yojson
-  catala-examples.allocations_familiales
-  catala-examples.aides_logement))
-
 (library
  (name api)
  (public_name french-law)
  (synopsis
   "A collection of functions for computing French taxes and benefits derived from Catala programs")
  (libraries catala.runtime_ocaml
-            catala-examples.allocations_familiales
             catala-examples.aides_logement)
  (modules api))
 

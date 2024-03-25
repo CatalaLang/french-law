@@ -2,10 +2,8 @@
 # yarn lockfile v1
 
 
-"@catala-lang/rescript-catala@^0.8.1-b.0":
+"@catala-lang/rescript-catala@file:../../catala/runtimes/rescript":
   version "0.8.1-b.0"
-  resolved "https://registry.yarnpkg.com/@catala-lang/rescript-catala/-/rescript-catala-0.8.1-b.0.tgz#46762f85f2e16af8b42ebb980db446189391a978"
-  integrity sha512-rOCwTFZE8u7r1WUqohU5r1Aq/cNJYZEJ4/S/MEJkrKUrwdV7tU0Pr8bU6i0MuYRWssclEUUy38yx2mm2dD29Cg==
   dependencies:
     decco "^1.6.0"
     rescript "^10.1.4"
@@ -22,6 +20,10 @@ decco@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/decco/-/decco-1.6.0.tgz#79a07d518691f92519066a067b77f04ce89b4896"
   integrity sha512-gdeDDPOh45Hz8YGvTkDP7ySo3Ll3ty+KfuFj21+jRbiCoE8HTCNB++pozCiMljxJx39CfvrHRYBY5FO5PMyXzw==
+
+"french-law@file:../../catala-examples/_build/french-law_npm.tar.gz":
+  version "0.9.0"
+  resolved "file:../../catala-examples/_build/french-law_npm.tar.gz#be847ab0edd023d9792d66424dbb2793a30a1e59"
 
 lodash@^4.17.4:
   version "4.17.21"
