@@ -10,6 +10,12 @@ CATALA_EXAMPLES_LIBDIR ?= $(shell ocamlfind query catala-examples)
 
 FRENCH_LAW_OCAML_LIB_DIR = ocaml
 
+dependencies-ocaml:
+	opam --cli=2.1 install "benchmark>=1.6"
+# Note: we could use `opam --cli=2.1 install . --deps-only`, but would rather
+# not include catala and catala-examples in the automatically installed
+# dependencies since they are likely to be installed by hand.
+
 french_law_library_ocaml:
 	dune build @install
 
@@ -82,7 +88,7 @@ run_cnaf_cross_tester: dependencies-python
 # High-level test and benchmarks commands
 #########################################
 
-dependencies: dependencies-js dependencies-python
+dependencies: dependencies-ocaml dependencies-js dependencies-python
 
 #> bench_ocaml			  : Run OCaml benchmarks for the Catala-generated code
 bench_ocaml: run_french_law_library_benchmark_ocaml
