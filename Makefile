@@ -29,7 +29,8 @@ run_french_law_library_benchmark_ocaml: french_law_library_ocaml
 FRENCH_LAW_JS_LIB_DIR = js
 
 dependencies-js:
-	npm install benchmark $(CATALA_EXAMPLES_LIBDIR)/french-law_npm.tar.gz
+	$(if $(CATALA_EXAMPLES_LIBDIR),,$(error Install catala-examples first))
+	npm install yarn benchmark $(CATALA_EXAMPLES_LIBDIR)/french-law_npm.tar.gz
 
 run_french_law_library_benchmark_js:
 	node js/examples.js
@@ -38,12 +39,15 @@ run_french_law_library_benchmark_js:
 # Rescript
 #-----------------------------------------
 
+YARN ?= $(CURDIR)/node_modules/yarn/bin/yarn
+
 #> build_french_law_library_web_api     : Builds the rescript web API of the French law library
 build_french_law_library_web_api:
+	$(if $(CATALA_EXAMPLES_LIBDIR),,$(error Install catala-examples first))
 	cd rescript && \
-	yarn add $(CATALA_LIBDIR)/runtime_rescript \
+	$(YARN) add $(CATALA_LIBDIR)/runtime_rescript \
 	         $(CATALA_EXAMPLES_LIBDIR)/french-law_npm.tar.gz && \
-	yarn && yarn build
+	$(YARN) && $(YARN) build
 
 #-----------------------------------------
 # Python
@@ -60,6 +64,7 @@ $(PY_VENV_DIR): $(PY_VENV_DIR)/french-law.stamp
 
 # Setup a venv and intall the Catala runtime from opam
 $(PY_VENV_DIR)/french-law.stamp:
+	$(if $(CATALA_EXAMPLES_LIBDIR),,$(error Install catala-examples first))
 	test -d $(PY_VENV_DIR) || python3 -m venv $(PY_VENV_DIR)
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U pip
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U \
