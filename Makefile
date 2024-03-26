@@ -30,7 +30,7 @@ FRENCH_LAW_JS_LIB_DIR = js
 
 dependencies-js:
 	$(if $(CATALA_EXAMPLES_LIBDIR),,$(error Install catala-examples first))
-	npm install yarn benchmark $(CATALA_EXAMPLES_LIBDIR)/french-law_npm.tar.gz
+	npm install benchmark $(CATALA_EXAMPLES_LIBDIR)/french-law_npm.tar.gz
 
 run_french_law_library_benchmark_js:
 	node js/examples.js
@@ -41,12 +41,15 @@ run_french_law_library_benchmark_js:
 
 YARN ?= $(CURDIR)/node_modules/yarn/bin/yarn
 
+dependencies-rescript:
+	npm install yarn refmt
+
 #> build_french_law_library_web_api     : Builds the rescript web API of the French law library
 build_french_law_library_web_api:
 	$(if $(CATALA_EXAMPLES_LIBDIR),,$(error Install catala-examples first))
 	cd rescript && \
 	$(YARN) add $(CATALA_LIBDIR)/runtime_rescript \
-	         $(CATALA_EXAMPLES_LIBDIR)/french-law_npm.tar.gz && \
+	            $(CATALA_EXAMPLES_LIBDIR)/french-law_npm.tar.gz && \
 	$(YARN) && $(YARN) build
 
 #-----------------------------------------
@@ -93,7 +96,11 @@ run_cnaf_cross_tester: dependencies-python
 # High-level test and benchmarks commands
 #########################################
 
-dependencies: dependencies-ocaml dependencies-js dependencies-python
+dependencies: \
+  dependencies-ocaml \
+  dependencies-js \
+  dependencies-rescript \
+  dependencies-python
 
 #> bench_ocaml			  : Run OCaml benchmarks for the Catala-generated code
 bench_ocaml: run_french_law_library_benchmark_ocaml
