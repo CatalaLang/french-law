@@ -42,7 +42,7 @@ run_french_law_library_benchmark_js:
 YARN ?= $(CURDIR)/rescript/node_modules/yarn/bin/yarn
 
 dependencies-rescript:
-	cd rescript && npm install yarn refmt
+	cd rescript && npm install yarn
 
 #> build_french_law_library_web_api     : Builds the rescript web API of the French law library
 build_french_law_library_web_api:
