@@ -66,13 +66,13 @@ PY_VENV_ACTIVATE = . $(PY_VENV_DIR)/bin/activate;
 $(PY_VENV_DIR): $(PY_VENV_DIR)/french-law.stamp
 
 # Setup a venv and intall the Catala runtime from opam
-$(PY_VENV_DIR)/french-law.stamp:
+$(PY_VENV_DIR)/french-law.stamp: $(CATALA_EXAMPLES_LIBDIR)/french_law_python.tar.gz
 	$(if $(CATALA_EXAMPLES_LIBDIR),,$(error Install catala-examples first))
 	test -d $(PY_VENV_DIR) || python3 -m venv $(PY_VENV_DIR)
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U pip
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U \
 	  $(CATALA_LIBDIR)/runtime_python \
-	  $(CATALA_EXAMPLES_LIBDIR)/french_law_python.tar.gz
+	  $<
 	$(PY_VENV_ACTIVATE) python3 -m pip install -U requests # Needed by cnaf_cross_tester
 	touch $@
 
