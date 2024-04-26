@@ -92,12 +92,10 @@ let run_test_allocations_familiales () =
     incr num_successful;
     total_amount := Float.add !total_amount amount
   with
-  | (Runtime.NoValueProvided _ | Runtime.ConflictError _) as err ->
+  | Runtime.Error (AssertionFailed, _) -> ()
+  | Runtime.Error _ as exc ->
     Format.printf "%s\n%a\nincome: %d\ncurrent_date: %s\nresidence: %a\n"
-      (match err with
-      | Runtime.NoValueProvided _ -> "No value provided somewhere!"
-      | Runtime.ConflictError _ -> "Conflict error!"
-      | _ -> failwith "impossible")
+      (Printexc.to_string exc)
       (Format.pp_print_list (fun fmt child ->
            Format.fprintf fmt
              "Child %d:\n\
@@ -113,7 +111,6 @@ let run_test_allocations_familiales () =
       (Runtime.date_to_string current_date)
       format_residence residence;
     exit (-1)
-  | Runtime.AssertionFailed _ -> ()
 
 let aides_logement_input :
     Aides_logement.CalculetteAidesAuLogementGardeAlternee_in.t =
@@ -218,14 +215,10 @@ let run_test_aides_logement () =
       (Aides_logement.calculette_aides_au_logement_garde_alternee
          aides_logement_input)
   with
-  | (Runtime.NoValueProvided _ | Runtime.ConflictError _) as err ->
-    Format.printf "%s"
-      (match err with
-      | Runtime.NoValueProvided _ -> "No value provided somewhere!"
-      | Runtime.ConflictError _ -> "Conflict error!"
-      | _ -> failwith "impossible");
+  | Runtime.Error (AssertionFailed, _) -> ()
+  | Runtime.Error _ as exc ->
+    Format.printf "%s" (Printexc.to_string exc);
     exit (-1)
-  | Runtime.AssertionFailed _ -> ()
 
 let _test =
   let () = run_test_aides_logement () in
