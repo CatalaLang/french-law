@@ -40,7 +40,8 @@ let random_children (id : int) =
       d_beneficie_titre_personnel_aide_personnelle_logement = Random.bool ();
     }
 
-let format_residence (fmt : Format.formatter) (r : AF.France.Collectivite.t) : unit =
+let format_residence (fmt : Format.formatter) (r : AF.France.Collectivite.t) :
+    unit =
   Format.fprintf fmt "%s"
     AF.France.Collectivite.(
       match r with
@@ -92,11 +93,12 @@ let run_test_allocations_familiales () =
     incr num_successful;
     total_amount := Float.add !total_amount amount
   with
-  | (Runtime.NoValueProvided _ | Runtime.ConflictError _) as err ->
+  | (Runtime.Error (Runtime.NoValue, _) | Runtime.Error (Runtime.Conflict, _))
+    as err ->
     Format.printf "%s\n%a\nincome: %d\ncurrent_date: %s\nresidence: %a\n"
       (match err with
-      | Runtime.NoValueProvided _ -> "No value provided somewhere!"
-      | Runtime.ConflictError _ -> "Conflict error!"
+      | Runtime.Error (Runtime.NoValue, _) -> "No value provided somewhere!"
+      | Runtime.Error (Runtime.Conflict, _) -> "Conflict error!"
       | _ -> failwith "impossible")
       (Format.pp_print_list (fun fmt child ->
            Format.fprintf fmt
@@ -113,7 +115,7 @@ let run_test_allocations_familiales () =
       (Runtime.date_to_string current_date)
       format_residence residence;
     exit (-1)
-  | Runtime.AssertionFailed _ -> ()
+  | Runtime.Error (Runtime.AssertionFailed, _) -> ()
 
 let aides_logement_input :
     Aides_logement.CalculetteAidesAuLogementGardeAlternee_in.t =
@@ -128,8 +130,7 @@ let aides_logement_input :
             mode_occupation =
               Aides_logement.ModeOccupation.Locataire
                 {
-                  bailleur =
-                    Aides_logement.TypeBailleur.BailleurPrive ();
+                  bailleur = Aides_logement.TypeBailleur.BailleurPrive ();
                   beneficiaire_aide_adulte_ou_enfant_handicapes = false;
                   logement_est_chambre = false;
                   colocation = false;
@@ -137,9 +138,7 @@ let aides_logement_input :
                     false;
                   logement_meuble_d842_2 = false;
                   changement_logement_d842_4 =
-                    Aides_logement.ChangementLogementD842_4
-                    .PasDeChangement
-                      ();
+                    Aides_logement.ChangementLogementD842_4.PasDeChangement ();
                   loyer_principal = Runtime.money_of_units_int 450;
                 };
             proprietaire = Aides_logement.ParentOuAutre.Autre ();
@@ -156,19 +155,15 @@ let aides_logement_input :
               Aides_logement.PersonneACharge.EnfantACharge
                 {
                   a_deja_ouvert_droit_aux_allocations_familiales = true;
-                  nationalite =
-                    Aides_logement.Nationalite.Francaise ();
+                  nationalite = Aides_logement.Nationalite.Francaise ();
                   etudes_apprentissage_stage_formation_pro_impossibilite_travail =
                     false;
                   remuneration_mensuelle = Runtime.money_of_units_int 0;
                   obligation_scolaire =
-                    Prestations_familiales.SituationObligationScolaire
-                    .Pendant
+                    Prestations_familiales.SituationObligationScolaire.Pendant
                       ();
                   situation_garde_alternee =
-                    Aides_logement.SituationGardeAlternee
-                    .PasDeGardeAlternee
-                      ();
+                    Aides_logement.SituationGardeAlternee.PasDeGardeAlternee ();
                   date_de_naissance = Runtime.date_of_numbers 2015 1 1;
                   identifiant = Runtime.integer_of_int 0;
                 };
@@ -177,15 +172,11 @@ let aides_logement_input :
                   a_deja_ouvert_droit_aux_allocations_familiales = true;
                   remuneration_mensuelle = Runtime.money_of_units_int 0;
                   obligation_scolaire =
-                    Prestations_familiales.SituationObligationScolaire
-                    .Pendant
+                    Prestations_familiales.SituationObligationScolaire.Pendant
                       ();
                   situation_garde_alternee =
-                    Aides_logement.SituationGardeAlternee
-                    .PasDeGardeAlternee
-                      ();
-                  nationalite =
-                    Aides_logement.Nationalite.Francaise ();
+                    Aides_logement.SituationGardeAlternee.PasDeGardeAlternee ();
+                  nationalite = Aides_logement.Nationalite.Francaise ();
                   etudes_apprentissage_stage_formation_pro_impossibilite_travail =
                     false;
                   date_de_naissance = Runtime.date_of_numbers 2016 1 1;
@@ -193,8 +184,7 @@ let aides_logement_input :
                 };
             ];
         nombre_autres_occupants_logement = Runtime.integer_of_int 0;
-        situation_familiale =
-          Aides_logement.SituationFamiliale.Concubins ();
+        situation_familiale = Aides_logement.SituationFamiliale.Concubins ();
         condition_rattache_foyer_fiscal_parent_ifi = false;
         enfant_a_naitre_apres_quatrieme_mois_grossesse = false;
         residence = Metropole ();
@@ -218,14 +208,15 @@ let run_test_aides_logement () =
       (Aides_logement.calculette_aides_au_logement_garde_alternee
          aides_logement_input)
   with
-  | (Runtime.NoValueProvided _ | Runtime.ConflictError _) as err ->
+  | (Runtime.Error (Runtime.NoValue, _) | Runtime.Error (Runtime.Conflict, _))
+    as err ->
     Format.printf "%s"
       (match err with
-      | Runtime.NoValueProvided _ -> "No value provided somewhere!"
-      | Runtime.ConflictError _ -> "Conflict error!"
+      | Runtime.Error (Runtime.NoValue, _) -> "No value provided somewhere!"
+      | Runtime.Error (Runtime.Conflict, _) -> "Conflict error!"
       | _ -> failwith "impossible");
     exit (-1)
-  | Runtime.AssertionFailed _ -> ()
+  | Runtime.Error (Runtime.AssertionFailed, _) -> ()
 
 let _test =
   let () = run_test_aides_logement () in
