@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from catala.runtime import *  # type: ignore
-from french_law.France import *
-from french_law.Prestations_familiales import *
-from french_law.Allocations_familiales import InterfaceAllocationsFamilialesIn, PriseEnCharge, interface_allocations_familiales, PriseEnCharge_Code, EnfantEntree, InterfaceAllocationsFamilialesIn
-from french_law.Aides_logement import *
+import french_law.France as France
+import french_law.Prestations_familiales as PF
+import french_law.Allocations_familiales as AF
+import french_law.Aides_logement as AL
 from typing import cast
 
 # Allocations familiales
@@ -15,7 +15,7 @@ class Enfant:
         id: int,
         remuneration_mensuelle: int,
         date_de_naissance: datetime.date,
-        prise_en_charge: PriseEnCharge_Code,
+        prise_en_charge: AF.PriseEnCharge_Code,
         a_deja_ouvert_droit_aux_allocations_familiales: bool,
         beneficie_titre_personnel_aide_personnelle_logement: bool
     ) -> None:
@@ -26,15 +26,15 @@ class Enfant:
         self.a_deja_ouvert_droit_aux_allocations_familiales = a_deja_ouvert_droit_aux_allocations_familiales
         self.beneficie_titre_personnel_aide_personnelle_logement = beneficie_titre_personnel_aide_personnelle_logement
 
-    def to_allocations_familiales(self) -> EnfantEntree:
-        return EnfantEntree(
+    def to_allocations_familiales(self) -> AF.EnfantEntree:
+        return AF.EnfantEntree(
             d_identifiant=integer_of_int(self.id),
             d_remuneration_mensuelle=money_of_units_int(
                 self.remuneration_mensuelle),
             d_a_deja_ouvert_droit_aux_allocations_familiales=self.a_deja_ouvert_droit_aux_allocations_familiales,
             d_beneficie_titre_personnel_aide_personnelle_logement=self.beneficie_titre_personnel_aide_personnelle_logement,
             d_date_de_naissance=date_of_datetime(self.date_de_naissance),
-            d_prise_en_charge=PriseEnCharge(self.prise_en_charge, Unit())
+            d_prise_en_charge=AF.PriseEnCharge(self.prise_en_charge, Unit())
         )
 
 
@@ -42,17 +42,17 @@ def allocations_familiales(
         date_courante: datetime.date,
         enfants: List[Enfant],
         ressources_menage: int,
-        residence: Collectivite_Code,
+        residence: France.Collectivite_Code,
         personne_charge_effective_permanente_est_parent: bool,
         personne_charge_effective_permanente_remplit_titre_I: bool,
         avait_enfant_a_charge_avant_1er_janvier_2012: bool
 ):
-    out = interface_allocations_familiales(InterfaceAllocationsFamilialesIn(
+    out = AF.interface_allocations_familiales(AF.InterfaceAllocationsFamilialesIn(
         i_date_courante_in=date_of_datetime(date_courante),
         i_enfants_in=[enfant.to_allocations_familiales()
                       for enfant in enfants],
         i_ressources_menage_in=money_of_units_int(ressources_menage),
-        i_residence_in=Collectivite(residence, Unit()),
+        i_residence_in=France.Collectivite(residence, Unit()),
         i_personne_charge_effective_permanente_est_parent_in=personne_charge_effective_permanente_est_parent,
         i_personne_charge_effective_permanente_remplit_titre_I_in=personne_charge_effective_permanente_remplit_titre_I,
         i_avait_enfant_a_charge_avant_1er_janvier_2012_in=avait_enfant_a_charge_avant_1er_janvier_2012
@@ -79,10 +79,10 @@ class EnfantAPL(PersonneAChargeAPL):
                  a_deja_ouvert_droit_aux_allocations_familiales: bool,
                  date_de_naissance: datetime.date,
                  remuneration_mensuelle: int,
-                 obligation_scolaire: SituationObligationScolaire_Code,
-                 situation_garde_alternee: SituationGardeAlternee_Code,
+                 obligation_scolaire: PF.SituationObligationScolaire_Code,
+                 situation_garde_alternee: AL.SituationGardeAlternee_Code,
                  coefficient_garde_alternee: Optional[int],
-                 nationalite: Nationalite,
+                 nationalite: AL.Nationalite,
                  etudes_apprentissage_stage_formation_pro_impossibilite_travail: bool):
         self.identifiant = identifiant
         self.a_deja_ouvert_droit_aux_allocations_familiales = a_deja_ouvert_droit_aux_allocations_familiales
@@ -103,7 +103,7 @@ class ParentAPL(PersonneAChargeAPL):
     def __init__(self, date_naissance: datetime.date,
                  ressources: int,
                  ascendant_descendant_collateral_deuxieme_troisieme_degre: bool,
-                 parente: Parente_Code,
+                 parente: AL.Parente_Code,
                  incapacite_80_pourcent_ou_restriction_emploi: bool,
                  beneficiaire_l161_19_l351_8_l643_3_secu: bool,
                  titulaire_allocation_personne_agee: bool):
@@ -142,7 +142,7 @@ class InfosLocation(InfosSpecifiques):
                  agees_ou_handicap_adultes_hebergees_onereux_particuliers: bool,
                  logement_meuble_d842_2: bool,
                  ancien_loyer_et_apl_relogement: Optional[Tuple[int, int]],
-                 type_bailleur: TypeBailleur_Code,
+                 type_bailleur: AL.TypeBailleur_Code,
                  bailleur_conventionne: Optional[bool],
                  reduction_loyer_solidarite: Optional[int]):
         self.loyer_principal = loyer_principal
@@ -163,13 +163,13 @@ class InfosLocation(InfosSpecifiques):
 
 class InfosLogementFoyer(InfosSpecifiques):
     def __init__(self,
-                 type: TypeLogementFoyer_Code,
+                 type: AL.TypeLogementFoyer_Code,
                  remplit_conditions_r832_21: bool,
                  conventionne_livre_III_titre_V_chap_III: bool,
                  date_conventionnement: datetime.date,
                  construit_application_loi_1957_12_III: bool,
                  redevance: int,
-                 categorie_equivalence_loyer_d842_16: CategorieEquivalenceLoyerAllocationLogementFoyer_Code,
+                 categorie_equivalence_loyer_d842_16: AL.CategorieEquivalenceLoyerAllocationLogementFoyer_Code,
                  conventionne_selon_regles_drom: bool,
                  beneficiaire_aide_adulte_ou_enfant_handicapes: bool,
                  logement_est_chambre: bool,
@@ -204,15 +204,15 @@ class InfosAccessionPropriete(InfosSpecifiques):
                  local_habite_premiere_fois_beneficiaire: bool,
                  copropriete: bool,
                  situation_r822_11_13_17: bool,
-                 type_travaux_logement_d832_15: TypeTravauxLogementD83215_Code,
-                 type_travaux_logement_r842_5: TypeTravauxLogementR8425_Code,
-                 anciennete_logement: NeufOuAncien_Code,
+                 type_travaux_logement_d832_15: AL.TypeTravauxLogementD83215_Code,
+                 type_travaux_logement_r842_5: AL.TypeTravauxLogementR8425_Code,
+                 anciennete_logement: AL.NeufOuAncien_Code,
                  ameliore_par_occupant: Optional[bool],
-                 type_pret: TypePret_Code,
+                 type_pret: AL.TypePret_Code,
                  date_signature_pret: datetime.date,
-                 titulaire_pret: TitulairePret_Code,
+                 titulaire_pret: AL.TitulairePret_Code,
                  operations_logement_evolutifs_sociaux_accession_propriete_aidee_Etat: bool,
-                 accord_financement_representant_Etat_outre_mer: AccordFinancementRepresentantEtatOutreMer_Code):
+                 accord_financement_representant_Etat_outre_mer: AL.AccordFinancementRepresentantEtatOutreMer_Code):
         self.logement_situe_commune_desequilibre_l831_2 = logement_situe_commune_desequilibre_l831_2
         self.mensualite_principale = mensualite_principale
         self.charges_mensuelles_pret = charges_mensuelles_pret
@@ -237,34 +237,34 @@ class InfosAccessionPropriete(InfosSpecifiques):
 
 def aides_logement(
     date_courante: datetime.date,
-    residence: Collectivite_Code,
+    residence: France.Collectivite_Code,
     ressources_menage_prises_en_compte: int,
     date_naissance_demandeur: datetime.date,
-    nationalite_demandeur: Nationalite,
+    nationalite_demandeur: AL.Nationalite,
     personne_hebergee_centre_soins: bool,
     personne_rattache_foyer_fiscal_parent_ifi: bool,
     nombre_autres_occupants_logement_hors_menage: int,
     enfant_a_naitre_apres_quatrieme_mois_grossesse: bool,
     personnes_agees_handicapees_foyer_r844_4: bool,
-    situation_familiale: SituationFamiliale_Code,
+    situation_familiale: AL.SituationFamiliale_Code,
     date_mariage: Optional[datetime.date],
-    prestations_recues: List[PrestationRecue_Code],
+    prestations_recues: List[AL.PrestationRecue_Code],
     residence_principale: bool,
     logement_est_decent: bool,
     surface_logement_m_carres: int,
-    zone: ZoneDHabitation_Code,
+    zone: AL.ZoneDHabitation_Code,
     parts_logement_propriete_famille: Optional[int],
     parts_logement_usufruits_famille: Optional[int],
     date_naissance_et_conformite_sous_locataire_tiers: Optional[Tuple[datetime.date, bool]],
     magistrat_fonctionnaire_centre_interets_materiels_familiaux_hors_mayotte: bool,
     est_non_salarie_agricole_l781_8_l_781_46_code_rural: bool,
-    mode_occupation: ModeOccupation_Code,
+    mode_occupation: AL.ModeOccupation_Code,
     infos_specifiques: InfosSpecifiques,
     personnes_a_charge: List[PersonneAChargeAPL],
 ):
     if infos_specifiques.code() == InfosSpecifiques_Code.CodeLocation:
         infos_specifiques = cast(InfosLocation, infos_specifiques)
-        mode_occupation_value = cast(Any, Location(
+        mode_occupation_value = cast(Any, AL.Location(
             loyer_principal=money_of_units_int(
                 infos_specifiques.loyer_principal),
             beneficiaire_aide_adulte_ou_enfant_handicapes=infos_specifiques.beneficiaire_aide_adulte_ou_enfant_handicapes,
@@ -272,37 +272,37 @@ def aides_logement(
             colocation=infos_specifiques.colocation,
             agees_ou_handicap_adultes_hebergees_onereux_particuliers=infos_specifiques.agees_ou_handicap_adultes_hebergees_onereux_particuliers,
             logement_meuble_d842_2=infos_specifiques.logement_meuble_d842_2,
-            changement_logement_d842_4=ChangementLogementD8424(
-                code=ChangementLogementD8424_Code.PasDeChangement if
+            changement_logement_d842_4=AL.ChangementLogementD8424(
+                code=AL.ChangementLogementD8424_Code.PasDeChangement if
                 infos_specifiques.ancien_loyer_et_apl_relogement is None else
-                ChangementLogementD8424_Code.Changement,
+                AL.ChangementLogementD8424_Code.Changement,
                 value=Unit() if infos_specifiques.ancien_loyer_et_apl_relogement is None else
-                InfosChangementLogementD8424(
+                AL.InfosChangementLogementD8424(
                     ancien_loyer_principal=money_of_units_int(
                         infos_specifiques.ancien_loyer_et_apl_relogement[0]),
                     ancienne_allocation_logement=money_of_units_int(infos_specifiques.ancien_loyer_et_apl_relogement[1]))
             ),
-            bailleur=TypeBailleur(
+            bailleur=AL.TypeBailleur(
                 code=infos_specifiques.type_bailleur,
-                value=Unit() if infos_specifiques.type_bailleur == TypeBailleur_Code.BailleurPrive else (
-                    ConventionBailleurSocial(
+                value=Unit() if infos_specifiques.type_bailleur == AL.TypeBailleur_Code.BailleurPrive else (
+                    AL.ConventionBailleurSocial(
                         conventionne_livre_III_titre_V_chap_III=False if infos_specifiques.bailleur_conventionne is None
                         else infos_specifiques.bailleur_conventionne,
                         reduction_loyer_solidarite_percue=money_of_units_int(0 if infos_specifiques.reduction_loyer_solidarite is None
                                                                              else infos_specifiques.reduction_loyer_solidarite))
-                ) if infos_specifiques.type_bailleur == TypeBailleur_Code.BailleurSocial else (
-                    ConventionANHA(
+                ) if infos_specifiques.type_bailleur == AL.TypeBailleur_Code.BailleurSocial else (
+                    AL.ConventionANHA(
                         conventionne_livre_III_titre_II_chap_I_sec_3=False if infos_specifiques.bailleur_conventionne is None
                         else infos_specifiques.bailleur_conventionne)
-                    if infos_specifiques.type_bailleur == TypeBailleur_Code.BailleurPriveAvecConventionnementSocial else
+                    if infos_specifiques.type_bailleur == AL.TypeBailleur_Code.BailleurPriveAvecConventionnementSocial else
                     None  # type: ignore
                 ))
         ))
     elif infos_specifiques.code() == InfosSpecifiques_Code.CodeLogementFoyer:
         infos_specifiques = cast(InfosLogementFoyer, infos_specifiques)
-        mode_occupation_value = cast(Any, LogementFoyer(
+        mode_occupation_value = cast(Any, AL.LogementFoyer(
             logement_foyer_jeunes_travailleurs=infos_specifiques.logement_foyer_jeunes_travailleurs,
-            type=TypeLogementFoyer(
+            type=AL.TypeLogementFoyer(
                 code=infos_specifiques.type, value=Unit()),
             conventionne_selon_regles_drom=infos_specifiques.conventionne_selon_regles_drom,
             logement_meuble_d842_2=infos_specifiques.logement_meuble_d842_2,
@@ -314,7 +314,7 @@ def aides_logement(
             construit_application_loi_1957_12_III=infos_specifiques.construit_application_loi_1957_12_III,
             redevance=money_of_units_int(
                 infos_specifiques.redevance),
-            categorie_equivalence_loyer_d842_16=CategorieEquivalenceLoyerAllocationLogementFoyer(
+            categorie_equivalence_loyer_d842_16=AL.CategorieEquivalenceLoyerAllocationLogementFoyer(
                 code=infos_specifiques.categorie_equivalence_loyer_d842_16,
                 value=Unit()),
             logement_est_chambre=infos_specifiques.logement_est_chambre,
@@ -322,7 +322,7 @@ def aides_logement(
         ))
     else:  # infos_specifiques.code == InfosSpecifiques_Code.CodeAccessionPropriete
         infos_specifiques = cast(InfosAccessionPropriete, infos_specifiques)
-        mode_occupation_value = cast(Any, Proprietaire(
+        mode_occupation_value = cast(Any, AL.Proprietaire(
             mensualite_principale=money_of_units_int(
                 infos_specifiques.mensualite_principale),
             charges_mensuelles_pret=money_of_units_int(
@@ -332,23 +332,23 @@ def aides_logement(
             local_habite_premiere_fois_beneficiaire=infos_specifiques.local_habite_premiere_fois_beneficiaire,
             copropriete=infos_specifiques.copropriete,
             situation_r822_11_13_17=infos_specifiques.situation_r822_11_13_17,
-            type_travaux_logement_d832_15=TypeTravauxLogementD83215(
+            type_travaux_logement_d832_15=AL.TypeTravauxLogementD83215(
                 code=infos_specifiques.type_travaux_logement_d832_15, value=Unit()),
-            type_travaux_logement_r842_5=TypeTravauxLogementR8425(
+            type_travaux_logement_r842_5=AL.TypeTravauxLogementR8425(
                 code=infos_specifiques.type_travaux_logement_r842_5,
                 value=Unit()
             ),
-            anciennete_logement=NeufOuAncien(code=infos_specifiques.anciennete_logement, value=Unit()
+            anciennete_logement=AL.NeufOuAncien(code=infos_specifiques.anciennete_logement, value=Unit()
                                              if infos_specifiques.ameliore_par_occupant is None
                                              else infos_specifiques.ameliore_par_occupant),
-            pret=Pret(
-                type_pret=TypePret(
+            pret=AL.Pret(
+                type_pret=AL.TypePret(
                     code=infos_specifiques.type_pret, value=Unit()),
                 date_signature=date_of_datetime(
                     infos_specifiques.date_signature_pret),
-                titulaire_pret=TitulairePret(
+                titulaire_pret=AL.TitulairePret(
                     code=infos_specifiques.titulaire_pret, value=Unit()),
-                accord_financement_representant_Etat_outre_mer=AccordFinancementRepresentantEtatOutreMer(
+                accord_financement_representant_Etat_outre_mer=AL.AccordFinancementRepresentantEtatOutreMer(
                     code=infos_specifiques.accord_financement_representant_Etat_outre_mer,
                     value=Unit())
             ),
@@ -358,8 +358,8 @@ def aides_logement(
     def transform_personnes_a_charge(personne_a_charge: PersonneAChargeAPL) -> Any:
         if personne_a_charge.code() == PersonneAChargeAPL_Code.CodeEnfant:
             personne_a_charge = cast(EnfantAPL, personne_a_charge)
-            out = PersonneACharge(code=PersonneACharge_Code.EnfantACharge,
-                                  value=EnfantACharge(
+            out = AL.PersonneACharge(code=AL.PersonneACharge_Code.EnfantACharge,
+                                  value=AL.EnfantACharge(
                                       nationalite=personne_a_charge.nationalite,
                                       etudes_apprentissage_stage_formation_pro_impossibilite_travail=personne_a_charge.etudes_apprentissage_stage_formation_pro_impossibilite_travail,
                                       identifiant=integer_of_int(
@@ -369,16 +369,16 @@ def aides_logement(
                                           personne_a_charge.date_de_naissance[0]),
                                       remuneration_mensuelle=money_of_units_int(
                                           personne_a_charge.remuneration_mensuelle),
-                                      obligation_scolaire=SituationObligationScolaire(
+                                      obligation_scolaire=PF.SituationObligationScolaire(
                                           code=personne_a_charge.obligation_scolaire, value=Unit()),
-                                      situation_garde_alternee=SituationGardeAlternee(code=personne_a_charge.situation_garde_alternee,
+                                      situation_garde_alternee=AL.SituationGardeAlternee(code=personne_a_charge.situation_garde_alternee,
                                                                                       value=Unit() if personne_a_charge.coefficient_garde_alternee is None else personne_a_charge.coefficient_garde_alternee)
                                   ))
         else:  # personne_a_charge.code == PersonneAChargeAPL_Code.CodeParent
             personne_a_charge = cast(ParentAPL, personne_a_charge)
-            out = PersonneACharge(
-                code=PersonneACharge_Code.AutrePersonneACharge,
-                value=AutrePersonneACharge(
+            out = AL.PersonneACharge(
+                code=AL.PersonneACharge_Code.AutrePersonneACharge,
+                value=AL.AutrePersonneACharge(
                     date_naissance=date_of_datetime(
                         personne_a_charge.date_naissance),
                     ressources=money_of_units_int(
@@ -387,32 +387,32 @@ def aides_logement(
                     incapacite_80_pourcent_ou_restriction_emploi=personne_a_charge.incapacite_80_pourcent_ou_restriction_emploi,
                     beneficiaire_l161_19_l351_8_l643_3_secu=personne_a_charge.beneficiaire_l161_19_l351_8_l643_3_secu,
                     titulaire_allocation_personne_agee=personne_a_charge.titulaire_allocation_personne_agee,
-                    parente=Parente(
+                    parente=AL.Parente(
                         code=personne_a_charge.parente, value=Unit())
                 ))
         return out
 
-    out = calculette_aides_au_logement_garde_alternee(CalculetteAidesAuLogementGardeAlterneeIn(
-        menage_in=Menage(
-            residence=Collectivite(
+    out = AL.calculette_aides_au_logement_garde_alternee(AL.CalculetteAidesAuLogementGardeAlterneeIn(
+        menage_in=AL.Menage(
+            residence=France.Collectivite(
                 code=residence, value=Unit()),
-            prestations_recues=[PrestationRecue(
+            prestations_recues=[AL.PrestationRecue(
                 code=presta, value=Unit()) for presta in prestations_recues],
-            logement=Logement(
+            logement=AL.Logement(
                 residence_principale=residence_principale,
-                mode_occupation=ModeOccupation(
+                mode_occupation=AL.ModeOccupation(
                     code=mode_occupation,
                     value=mode_occupation_value
                 ),
-                proprietaire=ParentOuAutre(
-                    code=ParentOuAutre_Code.Autre if parts_logement_propriete_famille is None else ParentOuAutre_Code.DemandeurOuConjointOuParentOuViaPartsSocietes,
+                proprietaire=AL.ParentOuAutre(
+                    code=AL.ParentOuAutre_Code.Autre if parts_logement_propriete_famille is None else AL.ParentOuAutre_Code.DemandeurOuConjointOuParentOuViaPartsSocietes,
                     value=Unit() if parts_logement_propriete_famille is None else parts_logement_propriete_famille),
-                usufruit=ParentOuAutre(
-                    code=ParentOuAutre_Code.Autre if parts_logement_usufruits_famille is None else ParentOuAutre_Code.DemandeurOuConjointOuParentOuViaPartsSocietes,
+                usufruit=AL.ParentOuAutre(
+                    code=AL.ParentOuAutre_Code.Autre if parts_logement_usufruits_famille is None else AL.ParentOuAutre_Code.DemandeurOuConjointOuParentOuViaPartsSocietes,
                     value=Unit() if parts_logement_usufruits_famille is None else parts_logement_usufruits_famille),
-                loue_ou_sous_loue_a_des_tiers=LoueOuSousLoueADesTiers(
-                    code=LoueOuSousLoueADesTiers_Code.Non if date_naissance_et_conformite_sous_locataire_tiers is None else LoueOuSousLoueADesTiers_Code.Oui,
-                    value=Unit() if date_naissance_et_conformite_sous_locataire_tiers is None else PersonneSousLocation(
+                loue_ou_sous_loue_a_des_tiers=AL.LoueOuSousLoueADesTiers(
+                    code=AL.LoueOuSousLoueADesTiers_Code.Non if date_naissance_et_conformite_sous_locataire_tiers is None else AL.LoueOuSousLoueADesTiers_Code.Oui,
+                    value=Unit() if date_naissance_et_conformite_sous_locataire_tiers is None else AL.PersonneSousLocation(
                         date_naissance_personne_sous_location=date_of_datetime(date_naissance_et_conformite_sous_locataire_tiers[
                             0]),
                         conforme_article_l442_1=date_naissance_et_conformite_sous_locataire_tiers[
@@ -421,14 +421,14 @@ def aides_logement(
                 ),
                 logement_decent_l89_462=logement_est_decent,
                 surface_m_carres=integer_of_int(surface_logement_m_carres),
-                zone=ZoneDHabitation(code=zone, value=Unit())
+                zone=AL.ZoneDHabitation(code=zone, value=Unit())
             ),
             personnes_a_charge=[
                 transform_personnes_a_charge(personne_a_charge)
                 for personne_a_charge in personnes_a_charge],
             nombre_autres_occupants_logement=integer_of_int(
                 nombre_autres_occupants_logement_hors_menage),
-            situation_familiale=SituationFamiliale(
+            situation_familiale=AL.SituationFamiliale(
                 code=situation_familiale,
                 value=Unit() if date_mariage is None else date_of_datetime(date_mariage)
             ),
@@ -436,7 +436,7 @@ def aides_logement(
             enfant_a_naitre_apres_quatrieme_mois_grossesse=enfant_a_naitre_apres_quatrieme_mois_grossesse,
             personnes_agees_handicapees_foyer_r844_4=personnes_agees_handicapees_foyer_r844_4
         ),
-        demandeur_in=Demandeur(
+        demandeur_in=AL.Demandeur(
             date_naissance=date_of_datetime(date_naissance_demandeur),
             nationalite=nationalite_demandeur,
             est_non_salarie_agricole_l781_8_l_781_46_code_rural=est_non_salarie_agricole_l781_8_l_781_46_code_rural,
