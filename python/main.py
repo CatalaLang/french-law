@@ -1,13 +1,10 @@
 #!python3
 
 from datetime import date
-from french_law import *
-from french_law.Aides_logement import *
-from french_law.France import *
-from french_law.Prestations_familiales import *
-from french_law.Allocations_familiales import InterfaceAllocationsFamilialesIn, PriseEnCharge, interface_allocations_familiales, PriseEnCharge_Code, EnfantEntree, InterfaceAllocationsFamilialesIn
-# Attention: certains types d'Allocations_familiales ont les mêmes noms que ceux
-# de Prestations_familiales, ce qui causerait des conflits avec "import *".
+import french_law.France as France
+import french_law.Prestations_familiales as PF
+import french_law.Allocations_familiales as AF
+import french_law.Aides_logement as AL
 from src.api import EnfantAPL, InfosLocation, aides_logement, allocations_familiales, Enfant
 from catala.runtime import LogEvent, LogEventCode, reset_log, retrieve_log, Unit
 import timeit
@@ -22,17 +19,17 @@ def call_allocations_familiales() -> float:
         enfants=[
             Enfant(id=0, remuneration_mensuelle=0,
                    date_de_naissance=date(2003, 2, 2),
-                   prise_en_charge=PriseEnCharge_Code.EffectiveEtPermanente,
+                   prise_en_charge=AF.PriseEnCharge_Code.EffectiveEtPermanente,
                    a_deja_ouvert_droit_aux_allocations_familiales=True,
                    beneficie_titre_personnel_aide_personnelle_logement=False),
             Enfant(id=1, remuneration_mensuelle=300,
                    date_de_naissance=date(2013, 9, 30),
-                   prise_en_charge=PriseEnCharge_Code.GardeAlterneePartageAllocations,
+                   prise_en_charge=AF.PriseEnCharge_Code.GardeAlterneePartageAllocations,
                    a_deja_ouvert_droit_aux_allocations_familiales=True,
                    beneficie_titre_personnel_aide_personnelle_logement=False)
         ],
         ressources_menage=30000,
-        residence=Collectivite_Code.Metropole,
+        residence=France.Collectivite_Code.Metropole,
         personne_charge_effective_permanente_est_parent=True,
         personne_charge_effective_permanente_remplit_titre_I=True,
         avait_enfant_a_charge_avant_1er_janvier_2012=False,
@@ -41,27 +38,27 @@ def call_allocations_familiales() -> float:
 
 def call_aides_logement() -> float:
     return aides_logement(
-        residence=Collectivite_Code.Metropole,
+        residence=France.Collectivite_Code.Metropole,
         date_courante=date(2022, 5, 1),
         ressources_menage_prises_en_compte=11_500,
         date_naissance_demandeur=date(1992, 1, 1),
-        nationalite_demandeur=Nationalite(
-            code=Nationalite_Code.Francaise, value=Unit()),
+        nationalite_demandeur=AL.Nationalite(
+            code=AL.Nationalite_Code.Francaise, value=Unit()),
         personne_hebergee_centre_soins=False,
         personne_rattache_foyer_fiscal_parent_ifi=False,
         nombre_autres_occupants_logement_hors_menage=0,
         enfant_a_naitre_apres_quatrieme_mois_grossesse=False,
         personnes_agees_handicapees_foyer_r844_4=False,
-        situation_familiale=SituationFamiliale_Code.Concubins,
+        situation_familiale=AL.SituationFamiliale_Code.Concubins,
         date_mariage=None,
         prestations_recues=[],
         residence_principale=True,
         surface_logement_m_carres=65,
-        zone=ZoneDHabitation_Code.Zone2,
+        zone=AL.ZoneDHabitation_Code.Zone2,
         parts_logement_propriete_famille=None,
         parts_logement_usufruits_famille=None,
         date_naissance_et_conformite_sous_locataire_tiers=None,
-        mode_occupation=ModeOccupation_Code.Locataire,
+        mode_occupation=AL.ModeOccupation_Code.Locataire,
         personnes_a_charge=[
             EnfantAPL(
                 identifiant=1,
@@ -69,10 +66,10 @@ def call_aides_logement() -> float:
                 a_deja_ouvert_droit_aux_allocations_familiales=True,
                 date_de_naissance=date(2015, 1, 1),
                 remuneration_mensuelle=0,
-                nationalite=Nationalite(
-                    code=Nationalite_Code.Francaise, value=Unit()),
-                obligation_scolaire=SituationObligationScolaire_Code.Pendant,
-                situation_garde_alternee=SituationGardeAlternee_Code.PasDeGardeAlternee,
+                nationalite=AL.Nationalite(
+                    code=AL.Nationalite_Code.Francaise, value=Unit()),
+                obligation_scolaire=PF.SituationObligationScolaire_Code.Pendant,
+                situation_garde_alternee=AL.SituationGardeAlternee_Code.PasDeGardeAlternee,
                 coefficient_garde_alternee=None
             ),
             EnfantAPL(
@@ -81,10 +78,10 @@ def call_aides_logement() -> float:
                 a_deja_ouvert_droit_aux_allocations_familiales=True,
                 date_de_naissance=date(2016, 1, 1),
                 remuneration_mensuelle=0,
-                nationalite=Nationalite(
-                    code=Nationalite_Code.Francaise, value=Unit()),
-                obligation_scolaire=SituationObligationScolaire_Code.Pendant,
-                situation_garde_alternee=SituationGardeAlternee_Code.PasDeGardeAlternee,
+                nationalite=AL.Nationalite(
+                    code=AL.Nationalite_Code.Francaise, value=Unit()),
+                obligation_scolaire=PF.SituationObligationScolaire_Code.Pendant,
+                situation_garde_alternee=AL.SituationGardeAlternee_Code.PasDeGardeAlternee,
                 coefficient_garde_alternee=None)
         ],
         logement_est_decent=True,
@@ -96,7 +93,7 @@ def call_aides_logement() -> float:
             agees_ou_handicap_adultes_hebergees_onereux_particuliers=False,
             logement_meuble_d842_2=False,
             ancien_loyer_et_apl_relogement=None,
-            type_bailleur=TypeBailleur_Code.BailleurPrive,
+            type_bailleur=AL.TypeBailleur_Code.BailleurPrive,
             bailleur_conventionne=None,
             reduction_loyer_solidarite=None
         ),
