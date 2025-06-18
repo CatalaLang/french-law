@@ -163,7 +163,7 @@ class InfosLocation(InfosSpecifiques):
 
 class InfosLogementFoyer(InfosSpecifiques):
     def __init__(self,
-                 type: AL.TypeLogementFoyer_Code,
+                 type_logement: AL.TypeLogementFoyer_Code,
                  remplit_conditions_r832_21: bool,
                  conventionne_livre_III_titre_V_chap_III: bool,
                  date_conventionnement: datetime.date,
@@ -177,7 +177,7 @@ class InfosLogementFoyer(InfosSpecifiques):
                  logement_meuble_d842_2: bool,
                  logement_foyer_jeunes_travailleurs: bool):
         self.logement_foyer_jeunes_travailleurs = logement_foyer_jeunes_travailleurs
-        self.type = type
+        self.type_logement = type_logement
         self.remplit_conditions_r832_21 = remplit_conditions_r832_21
         self.conventionne_livre_III_titre_V_chap_III = conventionne_livre_III_titre_V_chap_III
         self.date_conventionnement = date_conventionnement
@@ -302,8 +302,8 @@ def aides_logement(
         infos_specifiques = cast(InfosLogementFoyer, infos_specifiques)
         mode_occupation_value = cast(Any, AL.LogementFoyer(
             logement_foyer_jeunes_travailleurs=infos_specifiques.logement_foyer_jeunes_travailleurs,
-            type=AL.TypeLogementFoyer(
-                code=infos_specifiques.type, value=Unit()),
+            type_logement=AL.TypeLogementFoyer(
+                code=infos_specifiques.type_logement, value=Unit()),
             conventionne_selon_regles_drom=infos_specifiques.conventionne_selon_regles_drom,
             logement_meuble_d842_2=infos_specifiques.logement_meuble_d842_2,
             beneficiaire_aide_adulte_ou_enfant_handicapes=infos_specifiques.beneficiaire_aide_adulte_ou_enfant_handicapes,
